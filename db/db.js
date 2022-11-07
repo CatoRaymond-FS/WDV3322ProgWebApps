@@ -1,5 +1,5 @@
 //use user model
-const User = require('../api/models/user');
+const user = require('../api/models/user');
 //findUser by email address {email: req.body.email}
 const findUser = async (email) => {
     return await user.findOne({ email: email });

@@ -10,86 +10,85 @@ const mongoose = require('mongoose');
 
 
 
-
+//SIGNUP
 router.post('/signup', (req, res) => {
     //findUser by email address {email: req.body.email}
     //if user exists return 409 message "User already exists"
     //encrypt password 
     //create new user object with email and encrypted password
     //save user 
-    
-    db.findUser(req.body.email)
-    .then(user => {
-        if(user) {
-            res.status(409).json({message: "User already exists"})
+    const password = req.body.password;
+    bcrypt.hash(password, 10, (err, hash) => {
+        if (err){
+            res.status(409).json({error: err.message});
         } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if(err) {
-                    res.status(500).json({error: "Error, please try"})
-                } else {
-                    const user = new User({
-                        _id: new mongoose.Types.ObjectId(),
-                        email: req.body.email,
-                        password: hash
-                    });
-                    user.save()
-                    .then(result => {
-                        res.status(201).json({message: "User created"})
-                    })
-                    .catch(err => {
-                        res.status(500).json({error: err})
-                    })
-                }
-            })
-        }
-    })
-    .catch(err => {
-        res.status(500).json({error: err})
-    })
-})
-
-
-router.post('/login', (req, res) => {
-    //findUser
-    //if user not found return 401 message Authentication failed
-    //else compare passwords 
-    //test for error
-    //test for result
-    //if result is true return 200 message Authentication successful and name
-    
-    db.findUser(req.body.email)
-    .then(user => {
-        if(user){
-  bcrypt.compare(req.body.password, user.password, (err, result) => {
-      if(err){return res.status(501).json({message: err.message})}
-
-        if(result){
-            res.status(200).json({
-                message: "Login successful",
-                result: result,
-                email: user.email
+            const user = new User({
+                _id: mongoose.Types.ObjectId(),
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                address: req.body.address,
+                city: req.body.city,
+                state: req.body.state,
+                zip: req.body.zip,
+                email: req.body.email,
+                password: hash
             });
-        }else{
-            res.status(401).json({
-                message: "Login failed",
-                result: result
-            });
+            db.saveUser(user)
+            .then(result => {
+                res.status(201).json({
+                    message: 'User created',
+                    user: result,
+                });
+            })  
+            .catch(err => {
+                res.status(500).json({error: err.message});
+            }
+            );  
         }
-    });
-        }else{
-            res.status(401).json({
-                message: "Login failed",
-                result: result
-            });
-        }
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({error: err});
     });
 });
 
 
+//LOGIN
+router.post('/login', (req, res) => {
+ //find the user 
+ //if no user send 401 message "User not found"
+ //else
+ //user returned with hashed password
+ //compare password with hashed password
+ //returns err, result: where result is true or false
+ //if result is false send 401 message "Incorrect password"
+ //else send 200 message "Login successful"
+ //user object back
+    db.findUser(req.body.email)
+    .then(user => {
+        if (!user){
+            res.status(401).json({message: 'User not found'});
+        } else {
+              bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if(err){
+                    return res.status(500).json({error: err.message});
+                }
+                else{
+                    if(result){
+                        res.status(201).json({
+                            message: 'Login successful',
+                            result: result,
+                            user: user
+                        });
+                    }
+                    else{
+                        res.status(401).json({message: 'Incorrect password'});
+                    }
+                }
+            
+            });
+        }
+    })
+});
+
+
+//PROFILE
 router.get('/profile', (req, res, next) => {
     res.status(200).json({
         message: '/profile - GET'
