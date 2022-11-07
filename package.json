@@ -12,7 +12,8 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "nodemon server"
+    "start": "nodemon server",
+    "test": "jest --watch"
   },
   "name": "program_web_apps",
   "version": "1.0.0",
