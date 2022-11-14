@@ -5,8 +5,8 @@ require('dotenv').config();
 
 
 //findUser by email address {email: req.body.email}
-const findUser = async (email) => {
-    return await user.findOne({ email: email });
+const findUser = async (object) => {
+    return await user.findOne({ object});
 };
     
 
