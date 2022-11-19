@@ -9,7 +9,9 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 //use routes
 const routes = require('../api/routes/routes');
-
+//use cors module
+const cors = require('cors');
+app.use(cors());
 //middleware for logging
 app.use(morgan('dev'));
 
@@ -24,10 +26,6 @@ app.get("/",(req,res) => {
         message:"Service is up and running",
         method: req.method});
 } );
-
-//use cors module
-const cors = require('cors');
-app.use(cors());
 
 
 app.use('/user', routes);

@@ -38,7 +38,7 @@ router.post('/signup', (req, res) => {
                         error: err
                     });
                 } else {
-                    const user = new User({
+                    const createdUser = new User({
                         _id: new mongoose.Types.ObjectId(),
                         firstName: req.body.firstName,
                         lastName: req.body.lastName,
@@ -49,7 +49,7 @@ router.post('/signup', (req, res) => {
                         email: req.body.email,
                         password: hash
                     });
-                    db.saveUser(user)
+                    db.saveUser(createdUser)
                     .then(result => {
                         console.log(result);
                         res.status(201).json({
@@ -95,44 +95,39 @@ router.post('/login', (req, res) => {
             return res.status(401).json({
                 message: "User not found"
             });
-        }
-        bcrypt.compare(req.body.password, user.password, (err, result) => {
-            if(err){
-                return res.status(401).json({
-                    message: "Auth failed"
-                });
-            }
-            if(result){
-                const token = jwt.sign({
-                    email: user.email,
-                    userId: user._id
-                }, 
-                process.env.JWT_KEY,
-                {
-                    expiresIn: "1h"
+        } else {
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if(err){
+                    return res.status(401).json({
+                        message: "Auth failed 1"
+                    });
                 }
-                );
-                return res.status(200).json({
-                    message: "Auth successful",
-                    token: token,
-                    name: user.firstName
+                if(result){
+                    const token = jwt.sign({
+                        email: user.email,
+                        userId: user._id
+                    }, process.env.JWT_KEY, {
+                        expiresIn: "1h"
+                    });
+                    return res.status(200).json({
+                        message: "Auth successful",
+                        token: token,
+                        name: user.firstName
+                    });
+                }
+                res.status(401).json({
+                    message: "Auth failed 2"
                 });
-            }
-            res.status(401).json({
-                message: "Auth failed"
             });
-        });
-    }
-    )
+        }
+    })
     .catch(err => {
         console.log(err);
         res.status(500).json({
-            error: err
-        });
-    }
-    );
-});
 
+        });
+    });
+});
 
 
 
