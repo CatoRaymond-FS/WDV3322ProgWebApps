@@ -12,6 +12,13 @@ const routes = require('../api/routes/routes');
 //use cors module
 const cors = require('cors');
 app.use(cors());
+//swagger
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const options = require('../config/swaggerOptions');
+
+
+
 //middleware for logging
 app.use(morgan('dev'));
 
@@ -29,6 +36,10 @@ app.get("/",(req,res) => {
 
 
 app.use('/user', routes);
+
+const swaggerDocs = swaggerJsDoc(options);
+console.log(swaggerDocs);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //error handling middleware using arrow functions
 app.use((req, res, next) => {

@@ -15,6 +15,32 @@ const user = require('../models/user');
 
 router.use(express.json());
 
+/*
+ * @swagger
+ * tags:
+ *  name:User Post
+ *  description: This is for the user posts
+ *  /user/signup
+ *  post:
+ *      tags: [User Post]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          title:
+ *                              type: string
+ *                              default: Why me
+ *                          post:
+ *                              type: string
+ *                              default: Because you are you
+ *      responses:
+ *          default:
+ *              description: Success
+
+ */
 
 //SIGNUP
 router.post('/signup', (req, res) => {
