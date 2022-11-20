@@ -18,15 +18,15 @@ router.use(express.json());
 /*
  * @swagger
  * tags:
- *  name:User Post
+ *  name: User Post
  *  description: This is for the user posts
- *  /user/signup
+ *  /user/signup:
  *  post:
  *      tags: [User Post]
  *      requestBody:
  *          required: true
  *          content:
- *              application/json
+ *              application/json:
  *                  schema:
  *                      type: object
  *                      properties:
