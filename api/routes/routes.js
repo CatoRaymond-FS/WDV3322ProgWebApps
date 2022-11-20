@@ -18,24 +18,24 @@ router.use(express.json());
 /*
  * @swagger
  * tags:
- *  name:User Post
+ *  name: User Post
  *  description: This is for the user posts
- *  /user/signup
+ *  /user/signup:
  *  post:
  *      tags: [User Post]
  *      requestBody:
  *          required: true
  *          content:
- *              application/json
+ *              application/json:
  *                  schema:
  *                      type: object
  *                      properties:
- *                          title:
+ *                          email:
  *                              type: string
- *                              default: Why me
- *                          post:
+ *                              default: jim123@gmail.com
+ *                          password:
  *                              type: string
- *                              default: Because you are you
+ *                              default: 2143658709
  *      responses:
  *          default:
  *              description: Success
@@ -97,6 +97,32 @@ router.post('/signup', (req, res) => {
 });
 
 
+/*
+ * @swagger
+ * tags:
+ *  name: User Post
+ *  description: This is for the user posts
+ *  /user/login:
+ *  post:
+ *      tags: [User Post]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          email:
+ *                              type: string
+ *                              default: jim123@gmail.com
+ *                          password:
+ *                              type: string
+ *                              default: 2143658709
+ *      responses:
+ *          default:
+ *              description: Success
+
+ */
 
 
 
@@ -157,6 +183,32 @@ router.post('/login', (req, res) => {
 
 
 
+/*
+ * @swagger
+ * tags:
+ *  name: User Post
+ *  description: This is for the user get
+ *  /user/profile:
+ *  get:
+ *      tags: [User Get]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          email:
+ *                              type: string
+ *                              default: jim123@gmail.com
+ *                          password:
+ *                              type: string
+ *                              default: 2143658709
+ *      responses:
+ *          default:
+ *              description: Success
+
+ */
 
 //PROFILE
 router.get('/profile', checkAuth, (req, res, next) => {
